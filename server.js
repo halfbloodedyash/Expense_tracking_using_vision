@@ -416,25 +416,20 @@ app.use('*', (req, res) => {
 });
 
 // Start server
+// Use PORT from environment (Railway provides this automatically)
+
 app.listen(PORT, () => {
-    logger.info(`🚀 WhatsApp Expense Tracker Bot running on port ${PORT}`);
+    logger.info(`🚀 WhatsApp Expense Tracker running on port ${PORT}`);
     logger.info(`📱 Environment: ${process.env.NODE_ENV || 'development'}`);
-    logger.info(`🔐 Webhook verify token: ${process.env.WEBHOOK_VERIFY_TOKEN ? 'configured' : 'missing'}`);
     
-    // Log webhook URL for Heroku
-    if (process.env.HEROKU_APP_NAME) {
-        logger.info(`🔗 Webhook URL: https://${process.env.HEROKU_APP_NAME}.herokuapp.com/webhook`);
-    } else if (process.env.RAILWAY_PUBLIC_DOMAIN) {
+    // Log Railway webhook URL
+    if (process.env.RAILWAY_PUBLIC_DOMAIN) {
         logger.info(`🔗 Webhook URL: https://${process.env.RAILWAY_PUBLIC_DOMAIN}/webhook`);
     }
     
-    console.log('✅ WhatsApp Expense Tracker Bot is ready!');
-    console.log('📋 Features enabled:');
-    console.log('   • AI Receipt Processing (Gemini Vision)');
-    console.log('   • Natural Language Parsing (Groq)');
-    console.log('   • Real-time WhatsApp Messaging');
-    console.log('   • Expense Analytics & Insights');
+    console.log('✅ WhatsApp Expense Tracker Bot is ready on Railway!');
 });
+
 
 // Graceful shutdown handling
 process.on('SIGTERM', () => {
