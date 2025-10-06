@@ -8,83 +8,53 @@ class GroqService {
         });
     }
 
-    async parseTextExpense(userMessage) {
-        try {
-            const prompt = `
-            Parse this expense message from a user and extract the spending information.
-            Message: "${userMessage}"
-            
-            Return ONLY a valid JSON object:
-            {
-                "amount": <number>,
-                "description": "<what was purchased>",
-                "category": "<one of: food, transport, shopping, entertainment, healthcare, utilities, other>",
-                "merchant": "<store name if mentioned, otherwise null>"
-            }
-            
-            Examples:
-            "Spent 25 on lunch at McDonald's" -> {"amount": 25, "description": "lunch", "category": "food", "merchant": "McDonald's"}
-            "Paid 50 for groceries" -> {"amount": 50, "description": "groceries", "category": "food", "merchant": null}
-            "Bus fare 3 dollars" -> {"amount": 3, "description": "bus fare", "category": "transport", "merchant": null}
-            "Bought medicine for 15" -> {"amount": 15, "description": "medicine", "category": "healthcare", "merchant": null}
-            
-            Rules:
-            - Extract numerical amount only
-            - Choose most appropriate category
-            - Keep description brief
-            - Only include merchant if explicitly mentioned
-            `;
+async parseTextExpense(userMessage) {
+    try {
+        const prompt = `
+        Parse this expense message in Indian context and extract the spending information.
+        Message: "${userMessage}"
+        
+        Return ONLY a valid JSON object:
+        {
+            "amount": <number in rupees>,
+            "description": "<what was purchased>",
+            "category": "<one of: food, transport, shopping, entertainment, healthcare, utilities, other>",
+            "merchant": "<store name if mentioned, otherwise null>",
+            "currency": "INR"
+        }
+        
+        Examples:
+        - "Spent 500 on lunch" -> amount: 500
+        - "Paid ₹250 for groceries" -> amount: 250
+        - "Bus fare 30 rupees" -> amount: 30
+        `;
 
-            logger.info('Parsing text expense with Groq:', userMessage.substring(0, 50));
+        const completion = await this.groq.chat.completions.create({
+            messages: [{ role: "user", content: prompt }],
+            model: "llama-3.1-8b-instant",
+            temperature: 0.1,
+            max_tokens: 200
+        });
 
-            const completion = await this.groq.chat.completions.create({
-                messages: [{ role: "user", content: prompt }],
-                model: "llama-3.1-8b-instant",
-                temperature: 0.1,
-                max_tokens: 200
-            });
-
-            const response = completion.choices[0].message.content.trim();
-            const cleanResponse = response.replace(/``````/g, '').trim();
-            
-            try {
-                const parsedData = JSON.parse(cleanResponse);
-                
-                // Validate amount
-                if (!parsedData.amount || isNaN(parsedData.amount) || parsedData.amount <= 0) {
-                    logger.warn('Invalid amount in Groq response:', parsedData.amount);
-                    return null;
-                }
-
-                // Validate category
-                const validCategories = ['food', 'transport', 'shopping', 'entertainment', 'healthcare', 'utilities', 'other'];
-                if (!validCategories.includes(parsedData.category)) {
-                    parsedData.category = 'other';
-                }
-
-                // Ensure description exists
-                if (!parsedData.description) {
-                    parsedData.description = 'expense';
-                }
-                
-                logger.info('Text expense parsed successfully:', {
-                    amount: parsedData.amount,
-                    description: parsedData.description,
-                    category: parsedData.category
-                });
-                
-                return parsedData;
-            } catch (parseError) {
-                logger.error('Groq JSON Parse Error:', parseError);
-                logger.error('Raw Groq response:', response);
-                return null;
-            }
-            
-        } catch (error) {
-            logger.error('Groq API Error:', error);
+        const response = completion.choices[0].message.content.trim();
+        const cleanResponse = response.replace(/``````/g, '').trim();
+        
+        const parsedData = JSON.parse(cleanResponse);
+        
+        if (!parsedData.amount || isNaN(parsedData.amount) || parsedData.amount <= 0) {
             return null;
         }
+
+        // Ensure currency is set to INR
+        parsedData.currency = 'INR';
+        return parsedData;
+        
+    } catch (error) {
+        logger.error('Groq API Error:', error);
+        return null;
     }
+}
+
 
     async generateInsights(expenses) {
         try {

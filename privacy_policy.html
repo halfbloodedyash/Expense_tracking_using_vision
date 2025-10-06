@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy – AI Expense Tracker Bot</title>
+  <meta name="description" content="Privacy Policy for the WhatsApp-based AI Expense Tracker Bot covering data collection, use, storage, security, third-party services, user rights, and compliance." />
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    :root{
+      --bg: #0b1016;
+      --panel: #0f1620;
+      --muted: #8aa0b2;
+      --text: #e9eef4;
+      --accent: #61dafb;
+      --border: #1e2a38;
+      --link: #8bd5ff;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #ffffff;
+        --panel: #f7f9fc;
+        --muted: #4a5568;
+        --text: #0f172a;
+        --accent: #2563eb;
+        --border: #e2e8f0;
+        --link: #2563eb;
+      }
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: linear-gradient(180deg, var(--bg), var(--panel));
+      color: var(--text);
+      line-height: 1.65;
+    }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container{ max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .shell{ display: grid; grid-template-columns: 300px 1fr; gap: 24px; }
+    @media (max-width: 980px){ .shell{ grid-template-columns: 1fr; } }
+
+    /* Header */
+    header {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: saturate(120%) blur(6px);
+      background: color-mix(in srgb, var(--panel) 80%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; padding: 14px 24px; }
+    .logo {
+      width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center;
+      background: radial-gradient(60% 60% at 30% 30%, var(--accent), transparent),
+                  linear-gradient(160deg, color-mix(in srgb, var(--accent) 40%, var(--panel)), var(--panel));
+      box-shadow: 0 10px 25px rgba(0,0,0,.25), inset 0 0 0 1px var(--border);
+      font-weight: 800; color: #001018;
+    }
+    .title { font-size: clamp(16px, 2.5vw, 20px); font-weight: 700; }
+
+    /* Card */
+    .card{ background: color-mix(in srgb, var(--panel) 92%, transparent);
+           border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 8px 28px rgba(2,6,23,.22);
+           padding: clamp(18px, 2.5vw, 26px); }
+
+    /* Sidebar */
+    nav.card{ position: sticky; top: 72px; align-self: start; max-height: calc(100dvh - 96px); overflow: auto; }
+    nav h3{ margin: 0 0 8px; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .toc{ list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+    .toc a{ display: block; padding: 8px 10px; border-radius: 10px; border: 1px solid transparent; }
+    .toc a:hover{ background: color-mix(in srgb, var(--panel) 85%, transparent); border-color: var(--border); }
+
+    /* Content */
+    .content h1{ font-size: clamp(22px, 3vw, 32px); margin: 6px 0 8px; }
+    .content h2{ font-size: clamp(18px, 2.2vw, 24px); margin-top: 28px; border-top: 1px dashed var(--border); padding-top: 16px; }
+    .content h3{ font-size: clamp(16px, 2vw, 20px); margin-top: 18px; }
+    .muted { color: var(--muted); font-size: 14px; }
+    .badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--border); background: color-mix(in srgb, var(--panel) 85%, transparent); font-size: 13px; }
+    .list{ padding-left: 18px; }
+
+    /* Footer */
+    footer{ margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
+
+    /* Back to top */
+    #topBtn{ position: fixed; right: 18px; bottom: 18px; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--panel); color: var(--text); box-shadow: 0 6px 20px rgba(0,0,0,.25); cursor: pointer; display: none; }
+    #topBtn.show{ display: inline-flex; }
+
+    /* Print */
+    @media print{
+      header, nav, #topBtn { display: none !important; }
+      body{ background: #fff; color: #000; }
+      .container{ max-width: 100%; padding: 0; }
+      .card{ border: none; box-shadow: none; padding: 0; }
+      .content h2{ border-top: none; padding-top: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true">₹</div>
+      <div>
+        <div class="title">AI Expense Tracker Bot</div>
+        <div class="muted">Privacy Policy</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="shell">
+      <!-- Sidebar / Table of Contents -->
+      <nav class="card" aria-label="Table of contents">
+        <h3>On this page</h3>
+        <ul class="toc">
+          <li><a href="#intro">1. Introduction</a></li>
+          <li><a href="#info">2. Information We Collect</a></li>
+          <li><a href="#use">3. How We Use Your Information</a></li>
+          <li><a href="#storage">4. Data Storage and Security</a></li>
+          <li><a href="#third">5. Third-Party Services</a></li>
+          <li><a href="#rights">6. Your Data Rights</a></li>
+          <li><a href="#sharing">7. Data Sharing and Disclosure</a></li>
+          <li><a href="#intl">8. International Data Transfers</a></li>
+          <li><a href="#children">9. Children's Privacy</a></li>
+          <li><a href="#changes">10. Changes to Privacy Policy</a></li>
+          <li><a href="#retention">11. Data Retention</a></li>
+          <li><a href="#contact">12. Contact Information</a></li>
+          <li><a href="#gdpr">13. Legal Basis for Processing (GDPR)</a></li>
+          <li><a href="#cookies">14. Cookies and Tracking</a></li>
+          <li><a href="#compliance">15. Compliance</a></li>
+        </ul>
+      </nav>
+
+      <!-- Main content -->
+      <article class="card content">
+        <h1>Privacy Policy</h1>
+        <p class="badge" aria-label="Last updated">
+          <span>Last Updated:</span>
+          <strong>August 30, 2025</strong>
+        </p>
+
+        <section id="intro" aria-labelledby="intro-h">
+          <h2 id="intro-h">1. Introduction</h2>
+          <p>This Privacy Policy explains how AI Expense Tracker Bot ("we," "our," or "us") collects, uses, and protects information when you use our WhatsApp-based expense tracking service ("Service").</p>
+          <p>By using our WhatsApp bot, you agree to the collection and use of information in accordance with this policy.</p>
+        </section>
+
+        <section id="info" aria-labelledby="info-h">
+          <h2 id="info-h">2. Information We Collect</h2>
+
+          <h3>2.1 Automatically Collected Information</h3>
+          <ul class="list">
+            <li><strong>WhatsApp Phone Number</strong>: To identify and communicate with you</li>
+            <li><strong>Message Metadata</strong>: Timestamp, message ID, and delivery status</li>
+            <li><strong>Usage Analytics</strong>: Bot interaction patterns and command usage</li>
+          </ul>
+
+          <h3>2.2 Information You Provide</h3>
+          <ul class="list">
+            <li><strong>Expense Data</strong>: Amount, description, merchant, category, and date</li>
+            <li><strong>Receipt Images</strong>: Photos of receipts you send for processing</li>
+            <li><strong>Text Messages</strong>: Expense descriptions and commands you send</li>
+          </ul>
+
+          <h3>2.3 AI-Generated Data</h3>
+          <ul class="list">
+            <li><strong>Extracted Receipt Data</strong>: Information processed from receipt images using AI</li>
+            <li><strong>Categorized Expenses</strong>: Automatically categorized expense data</li>
+            <li><strong>Spending Insights</strong>: AI-generated analysis of your spending patterns</li>
+          </ul>
+        </section>
+
+        <section id="use" aria-labelledby="use-h">
+          <h2 id="use-h">3. How We Use Your Information</h2>
+
+          <h3>3.1 Primary Services</h3>
+          <ul class="list">
+            <li>Process and categorize your expenses</li>
+            <li>Extract data from receipt images using AI technology</li>
+            <li>Generate spending insights and analytics</li>
+            <li>Respond to your commands and queries</li>
+            <li>Store expense history for reporting</li>
+          </ul>
+
+          <h3>3.2 Service Improvement</h3>
+          <ul class="list">
+            <li>Analyze usage patterns to improve bot functionality</li>
+            <li>Enhance AI accuracy for receipt processing</li>
+            <li>Develop new features based on user needs</li>
+          </ul>
+        </section>
+
+        <section id="storage" aria-labelledby="storage-h">
+          <h2 id="storage-h">4. Data Storage and Security</h2>
+
+          <h3>4.1 Data Storage</h3>
+          <ul class="list">
+            <li>Expense data is stored securely in encrypted databases</li>
+            <li>Receipt images are processed temporarily and not permanently stored</li>
+            <li>Data is retained for the duration of your active use of the service</li>
+          </ul>
+
+          <h3>4.2 Security Measures</h3>
+          <ul class="list">
+            <li>Industry-standard encryption for data transmission</li>
+            <li>Secure server infrastructure with access controls</li>
+            <li>Regular security audits and updates</li>
+            <li>No sharing of individual user data with third parties</li>
+          </ul>
+        </section>
+
+        <section id="third" aria-labelledby="third-h">
+          <h2 id="third-h">5. Third-Party Services</h2>
+          <p>Our bot integrates with the following third-party services:</p>
+
+          <h3>5.1 AI Processing Services</h3>
+          <ul class="list">
+            <li><strong>Google Gemini Vision</strong>: For receipt image processing</li>
+            <li><strong>Groq API</strong>: For natural language processing</li>
+          </ul>
+          <p>These services process data according to their respective privacy policies.</p>
+
+          <h3>5.2 WhatsApp Business API</h3>
+          <ul class="list">
+            <li><strong>Meta (WhatsApp)</strong>: For message delivery and communication</li>
+          </ul>
+          <p>Subject to WhatsApp's Privacy Policy and Terms of Service.</p>
+        </section>
+
+        <section id="rights" aria-labelledby="rights-h">
+          <h2 id="rights-h">6. Your Data Rights</h2>
+
+          <h3>6.1 Access and Control</h3>
+          <ul class="list">
+            <li>Request access to your stored expense data</li>
+            <li>Modify or delete incorrect expense entries</li>
+            <li>Export your expense data in standard formats</li>
+          </ul>
+
+          <h3>6.2 Data Deletion</h3>
+          <ul class="list">
+            <li>Stop using the bot to cease new data collection</li>
+            <li>Request complete data deletion by contacting us</li>
+            <li>Data will be deleted within 30 days of request</li>
+          </ul>
+
+          <h3>6.3 Communication Preferences</h3>
+          <ul class="list">
+            <li>You can stop receiving messages by blocking the bot</li>
+            <li>Commands to opt-out of specific notifications</li>
+          </ul>
+        </section>
+
+        <section id="sharing" aria-labelledby="sharing-h">
+          <h2 id="sharing-h">7. Data Sharing and Disclosure</h2>
+
+          <h3>7.1 We DO NOT:</h3>
+          <ul class="list">
+            <li>Sell your personal data to third parties</li>
+            <li>Share individual expense data with other users</li>
+            <li>Use your data for advertising purposes</li>
+            <li>Share data with unauthorized parties</li>
+          </ul>
+
+          <h3>7.2 We MAY share data when:</h3>
+          <ul class="list">
+            <li>Required by law or legal process</li>
+            <li>Necessary to protect our rights or safety</li>
+            <li>You explicitly consent to sharing</li>
+            <li>In anonymized, aggregated form for research</li>
+          </ul>
+        </section>
+
+        <section id="intl" aria-labelledby="intl-h">
+          <h2 id="intl-h">8. International Data Transfers</h2>
+          <p>Your data may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place to protect your data during international transfers.</p>
+        </section>
+
+        <section id="children" aria-labelledby="children-h">
+          <h2 id="children-h">9. Children's Privacy</h2>
+          <p>Our service is not intended for users under 13 years of age. We do not knowingly collect personal information from children under 13.</p>
+        </section>
+
+        <section id="changes" aria-labelledby="changes-h">
+          <h2 id="changes-h">10. Changes to Privacy Policy</h2>
+          <p>We may update this Privacy Policy periodically. We will notify users of material changes through the WhatsApp bot or other communication methods.</p>
+        </section>
+
+        <section id="retention" aria-labelledby="retention-h">
+          <h2 id="retention-h">11. Data Retention</h2>
+          <ul class="list">
+            <li><strong>Active Users</strong>: Data retained while you actively use the service</li>
+            <li><strong>Inactive Users</strong>: Data deleted after 12 months of inactivity</li>
+            <li><strong>Deleted Accounts</strong>: Data permanently deleted within 30 days</li>
+          </ul>
+        </section>
+
+        <section id="contact" aria-labelledby="contact-h">
+          <h2 id="contact-h">12. Contact Information</h2>
+          <p>For privacy-related questions or requests:</p>
+          <ul class="list">
+            <li><strong>Email</strong>: <a href="mailto:conatact2yash@protonmail.com">contact2yash@protonmail.com</a></li>
+            <li><strong>WhatsApp</strong>: Message our bot directly</li>
+          </ul>
+        </section>
+
+        <section id="gdpr" aria-labelledby="gdpr-h">
+          <h2 id="gdpr-h">13. Legal Basis for Processing (GDPR)</h2>
+          <p>For users in the EU/EEA, our legal basis for processing includes:</p>
+          <ul class="list">
+            <li><strong>Contract Performance</strong>: To provide expense tracking services</li>
+            <li><strong>Legitimate Interest</strong>: To improve and maintain our service</li>
+            <li><strong>Consent</strong>: For optional features and communications</li>
+          </ul>
+        </section>
+
+        <section id="cookies" aria-labelledby="cookies-h">
+          <h2 id="cookies-h">14. Cookies and Tracking</h2>
+          <p>Our WhatsApp bot does not use cookies or web tracking technologies. All interactions occur through WhatsApp's secure messaging platform.</p>
+        </section>
+
+        <section id="compliance" aria-labelledby="compliance-h">
+          <h2 id="compliance-h">15. Compliance</h2>
+          <ul class="list">
+            <li>General Data Protection Regulation (GDPR)</li>
+            <li>California Consumer Privacy Act (CCPA)</li>
+            <li>WhatsApp Business Messaging Policy</li>
+            <li>Other applicable privacy laws</li>
+          </ul>
+        </section>
+
+        <footer>
+          <p>&copy; <span id="year"></span> AI Expense Tracker Bot • All rights reserved.</p>
+        </footer>
+      </article>
+    </div>
+  </main>
+
+  <button id="topBtn" aria-label="Back to top" title="Back to top">↑ Top</button>
+
+  <script>
+    // Dynamic year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Back-to-top button logic
+    const topBtn = document.getElementById('topBtn');
+    const toggleBtn = () => {
+      if (window.scrollY > 260) topBtn.classList.add('show');
+      else topBtn.classList.remove('show');
+    };
+    window.addEventListener('scroll', toggleBtn);
+    topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Highlight current section in TOC
+    const sections = document.querySelectorAll('article section[id]');
+    const tocLinks = Array.from(document.querySelectorAll('nav .toc a'));
+    const byId = (id) => tocLinks.find(a => a.getAttribute('href') === `#${id}`);
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const link = byId(entry.target.id);
+        if (!link) return;
+        if (entry.isIntersecting) {
+          tocLinks.forEach(a => a.style.fontWeight = '');
+          link.style.fontWeight = '700';
+        }
+      });
+    }, { rootMargin: '-40% 0px -52% 0px', threshold: 0.01 });
+
+    sections.forEach(sec => observer.observe(sec));
+  </script>
+</body>
+</html>
+
