@@ -10,7 +10,7 @@ const crypto = require('crypto');
 function verifyToken(req, res, next) {
     const mode = req.query['hub.mode'];
     const token = req.query['hub.verify_token'];
-    
+
     if (mode === 'subscribe' && token === process.env.WEBHOOK_VERIFY_TOKEN) {
         logger.info('Webhook verification successful');
         next();
@@ -35,7 +35,7 @@ function verifySignature(req, res, next) {
     }
 
     const signature = req.headers['x-hub-signature-256'];
-    
+
     if (!signature) {
         logger.error('Missing x-hub-signature-256 header');
         return res.sendStatus(403);
@@ -49,13 +49,14 @@ function verifySignature(req, res, next) {
     try {
         // Meta sends the signature as "sha256=<hash>"
         const signatureHash = signature.split('=')[1];
-        
-        // Calculate expected signature
+
+        // Calculate expected signature using raw body (set by express.json verify option)
+        const rawBody = req.rawBody || JSON.stringify(req.body);
         const expectedHash = crypto
             .createHmac('sha256', process.env.META_APP_SECRET)
-            .update(JSON.stringify(req.body))
+            .update(rawBody)
             .digest('hex');
-        
+
         // Constant-time comparison to prevent timing attacks
         if (crypto.timingSafeEqual(Buffer.from(signatureHash), Buffer.from(expectedHash))) {
             logger.info('✅ Webhook signature verified');

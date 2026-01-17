@@ -41,6 +41,11 @@ if (!process.env.META_APP_SECRET && process.env.NODE_ENV === 'production') {
 
 logger.info('✅ All required environment variables are configured');
 
+// Trust proxy for reverse proxy environments (Render, Heroku, etc.)
+if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1);
+}
+
 // Security middleware
 app.use(helmet());
 app.use(cors());
@@ -61,9 +66,18 @@ const webhookLimiter = rateLimit({
     }
 });
 
-// Body parsing middleware
-app.use(express.json({ limit: '50mb' }));
+// Body parsing middleware with raw body capture for signature verification
+app.use(express.json({
+    limit: '50mb',
+    verify: (req, res, buf) => {
+        req.rawBody = buf.toString();
+    }
+}));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// Serve static files (landing page)
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Webhook verification endpoint (GET request from Meta)
 app.get('/webhook', (req, res) => {
