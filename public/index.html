@@ -1,72 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ExpenseBot - AI-Powered WhatsApp Expense Tracker</title>
-    <meta name="description" content="Track your expenses effortlessly via WhatsApp. Just send a receipt photo or type your expense - our AI handles the rest.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>ExpenseBot - The Future of Expense Tracking</title>
+    <meta name="description"
+        content="AI-powered expense tracking directly in WhatsApp. Zero friction, instant insights.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
+            --bg-dark: #030014;
             --bg-card: rgba(255, 255, 255, 0.03);
-            --accent: #00d4aa;
-            --accent-glow: rgba(0, 212, 170, 0.3);
-            --text-primary: #ffffff;
-            --text-secondary: #8b8b9e;
-            --text-muted: #5a5a6e;
-            --border: rgba(255, 255, 255, 0.08);
-            --whatsapp: #25D366;
+            --bg-card-hover: rgba(255, 255, 255, 0.06);
+            --primary: #7F5AF0;
+            --primary-glow: rgba(127, 90, 240, 0.4);
+            --secondary: #2CB67D;
+            --text-main: #FFFFFF;
+            --text-muted: #94A1B2;
+            --border: rgba(255, 255, 255, 0.05);
+            --glass: blur(20px) saturate(180%);
+            --whatsapp-green: #25D366;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
+            line-height: 1.5;
         }
 
-        /* Animated Background */
-        .bg-gradient {
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Ambient Background Background */
+        .ambient-light {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             pointer-events: none;
-            z-index: 0;
-            background: 
-                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 212, 170, 0.15), transparent),
-                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(99, 102, 241, 0.1), transparent),
-                radial-gradient(ellipse 50% 30% at 20% 80%, rgba(0, 212, 170, 0.08), transparent);
+            z-index: -1;
+            background:
+                radial-gradient(circle at 15% 50%, rgba(127, 90, 240, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(44, 182, 125, 0.08), transparent 25%);
+            filter: blur(60px);
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 24px;
-            position: relative;
-            z-index: 1;
         }
 
         /* Navigation */
         nav {
             position: fixed;
             top: 0;
-            left: 0;
-            right: 0;
+            width: 100%;
             z-index: 100;
-            padding: 20px 0;
-            backdrop-filter: blur(20px);
-            background: rgba(10, 10, 15, 0.8);
+            padding: 24px 0;
+            background: rgba(3, 0, 20, 0.7);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
         }
 
@@ -77,49 +89,39 @@
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
             font-size: 1.5rem;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent), var(--whatsapp));
-            border-radius: 12px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #94A1B2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
+            gap: 10px;
         }
 
-        .nav-cta {
-            background: var(--accent);
-            color: var(--bg-primary);
-            padding: 12px 28px;
-            border-radius: 50px;
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
             text-decoration: none;
-            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 99px;
+            font-weight: 500;
+            border: 1px solid var(--border);
             transition: all 0.3s ease;
-            box-shadow: 0 0 30px var(--accent-glow);
         }
 
-        .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 50px var(--accent-glow);
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
         }
 
         /* Hero Section */
         .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding-top: 100px;
+            padding: 180px 0 100px;
+            position: relative;
         }
 
-        .hero-content {
+        .hero-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 60px;
@@ -129,598 +131,508 @@
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-bottom: 24px;
+            padding: 6px 16px;
+            background: rgba(127, 90, 240, 0.1);
+            border: 1px solid rgba(127, 90, 240, 0.3);
+            border-radius: 99px;
+            color: #b8a2ff;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 32px;
+            box-shadow: 0 0 20px rgba(127, 90, 240, 0.1);
         }
 
-        .hero-badge span {
-            color: var(--accent);
-        }
-
-        h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
+        .hero-title {
+            font-size: clamp(3rem, 6vw, 4.5rem);
             line-height: 1.1;
+            font-weight: 700;
             margin-bottom: 24px;
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            letter-spacing: -2px;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, #7F5AF0 0%, #2CB67D 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        h1 .highlight {
-            background: linear-gradient(135deg, var(--accent), var(--whatsapp));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-text {
+        .hero-desc {
             font-size: 1.25rem;
-            color: var(--text-secondary);
+            color: var(--text-muted);
             margin-bottom: 40px;
             max-width: 500px;
+            line-height: 1.6;
         }
 
-        .hero-buttons {
+        .cta-group {
             display: flex;
             gap: 16px;
-            flex-wrap: wrap;
         }
 
         .btn-primary {
+            background: var(--whatsapp-green);
+            color: #000;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, var(--whatsapp), #128C7E);
-            color: white;
-            padding: 16px 32px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 40px rgba(37, 211, 102, 0.3);
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 50px rgba(37, 211, 102, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(37, 211, 102, 0.25);
         }
 
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--bg-card);
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border);
-            color: var(--text-primary);
+            color: white;
             padding: 16px 32px;
-            border-radius: 50px;
-            text-decoration: none;
+            border-radius: 12px;
             font-weight: 600;
+            text-decoration: none;
             transition: all 0.3s ease;
         }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--accent);
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* Phone Mockup */
-        .hero-visual {
+        /* 3D Phone Mockup Container */
+        .mockup-container {
             position: relative;
-            display: flex;
-            justify-content: center;
+            perspective: 1000px;
         }
 
-        .phone-mockup {
-            width: 300px;
-            height: 620px;
-            background: linear-gradient(145deg, #1a1a24, #0d0d12);
+        .phone-frame {
+            width: 320px;
+            height: 650px;
+            background: #000;
             border-radius: 50px;
-            padding: 12px;
-            box-shadow: 
-                0 50px 100px rgba(0, 0, 0, 0.5),
-                0 0 0 1px rgba(255, 255, 255, 0.1);
+            border: 8px solid #1a1a1a;
+            margin: 0 auto;
             position: relative;
+            box-shadow:
+                0 0 0 2px #333,
+                0 50px 100px -20px rgba(0, 0, 0, 0.5),
+                0 30px 60px -30px rgba(127, 90, 240, 0.2);
+            transform: rotateY(-15deg) rotateX(10deg);
+            transition: transform 0.5s ease;
+            overflow: hidden;
+        }
+
+        .mockup-container:hover .phone-frame {
+            transform: rotateY(0deg) rotateX(0deg);
         }
 
         .phone-screen {
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, #075E54 0%, #128C7E 100%);
-            border-radius: 40px;
+            background: #0b141a;
+            border-radius: 42px;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        .chat-header {
-            background: #075E54;
-            padding: 50px 20px 15px;
+        .whatsapp-header {
+            background: #1f2c34;
+            padding: 40px 16px 12px;
             display: flex;
             align-items: center;
             gap: 12px;
+            border-bottom: 1px solid #2a373f;
         }
 
-        .chat-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent), #00a88a);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .chat-name {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .chat-status {
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.7);
-        }
-
-        .chat-body {
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            background-color: #ECE5DD;
-            padding: 20px 15px;
-            height: calc(100% - 120px);
+        .chat-area {
+            flex: 1;
+            padding: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .message {
-            max-width: 85%;
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 0.875rem;
+        .msg {
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
             line-height: 1.4;
-            color: #000;
-            animation: messageIn 0.5s ease forwards;
-            opacity: 0;
+            animation: fadeIn 0.5s ease backwards;
         }
 
-        .message.sent {
-            background: #DCF8C6;
+        .sent {
+            background: #005c4b;
+            color: #fff;
             align-self: flex-end;
-            border-bottom-right-radius: 4px;
+            animation-delay: 0.2s;
         }
 
-        .message.received {
-            background: white;
+        .received {
+            background: #202c33;
+            color: #fff;
             align-self: flex-start;
-            border-bottom-left-radius: 4px;
+            animation-delay: 1.2s;
         }
 
-        .message:nth-child(1) { animation-delay: 0.5s; }
-        .message:nth-child(2) { animation-delay: 1s; }
-        .message:nth-child(3) { animation-delay: 1.5s; }
-        .message:nth-child(4) { animation-delay: 2s; }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
 
-        @keyframes messageIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* Floating Elements */
-        .floating-card {
-            position: absolute;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 16px 20px;
-            backdrop-filter: blur(20px);
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .floating-card.card-1 {
-            top: 10%;
-            right: -20px;
-            animation-delay: 0s;
-        }
-
-        .floating-card.card-2 {
-            bottom: 20%;
-            left: -40px;
-            animation-delay: 2s;
-        }
-
-        .floating-card .emoji {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-
-        .floating-card .label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .floating-card .value {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        /* Features Section */
+        /* Bento Grid Features */
         .features {
-            padding: 120px 0;
+            padding: 100px 0;
         }
 
-        .section-label {
+        .section-header {
             text-align: center;
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 0.875rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 700;
             margin-bottom: 60px;
         }
 
-        .features-grid {
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .bento-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 300px);
             gap: 24px;
         }
 
-        .feature-card {
+        .bento-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 24px;
+            border-radius: 32px;
             padding: 32px;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
+        .bento-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
-        .feature-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(0, 212, 170, 0.3);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        .card-large {
+            grid-column: span 2;
         }
 
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-
-        .feature-icon {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--accent), rgba(0, 212, 170, 0.3));
-            border-radius: 16px;
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
-        .feature-card h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
+        .bento-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
             margin-bottom: 12px;
         }
 
-        .feature-card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
+        .bento-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
         }
 
-        /* How It Works */
-        .how-it-works {
-            padding: 120px 0;
-            background: var(--bg-secondary);
+        .card-visual {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
         }
 
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
+        .bento-card:hover .card-visual {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        /* Steps Section */
+        .steps-section {
+            padding: 100px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
             margin-top: 60px;
         }
 
-        .step {
-            text-align: center;
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--border) 50%, transparent);
+            z-index: 0;
         }
 
-        .step-number {
+        .step-item {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            flex: 1;
+            padding: 0 20px;
+        }
+
+        .step-circle {
             width: 80px;
             height: 80px;
-            margin: 0 auto 24px;
-            background: linear-gradient(135deg, var(--accent), rgba(0, 212, 170, 0.2));
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
             border-radius: 50%;
+            margin: 0 auto 24px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
-            font-weight: 800;
-            position: relative;
+            box-shadow: 0 0 0 10px var(--bg-dark);
         }
 
-        .step h3 {
-            font-size: 1.25rem;
-            margin-bottom: 12px;
-        }
-
-        .step p {
-            color: var(--text-secondary);
-        }
-
-        /* CTA Section */
-        .cta {
-            padding: 120px 0;
-            text-align: center;
-        }
-
-        .cta-box {
-            background: linear-gradient(135deg, rgba(0, 212, 170, 0.1), rgba(37, 211, 102, 0.05));
-            border: 1px solid rgba(0, 212, 170, 0.2);
-            border-radius: 32px;
-            padding: 80px 40px;
-        }
-
-        .cta h2 {
-            font-size: clamp(2rem, 4vw, 3rem);
-            margin-bottom: 20px;
-        }
-
-        .cta p {
-            color: var(--text-secondary);
-            font-size: 1.25rem;
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+        .step-item h3 {
+            margin-bottom: 10px;
+            color: white;
         }
 
         /* Footer */
         footer {
-            padding: 60px 0;
-            border-top: 1px solid var(--border);
+            padding: 80px 0 40px;
             text-align: center;
-            color: var(--text-muted);
         }
 
-        /* Responsive */
-        @media (max-width: 900px) {
-            .hero-content {
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: inline-block;
+            background: linear-gradient(135deg, #7F5AF0, #2CB67D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .copy {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 968px) {
+            .hero-grid {
                 grid-template-columns: 1fr;
                 text-align: center;
             }
 
-            .hero-text {
-                margin-left: auto;
-                margin-right: auto;
+            .hero-title {
+                font-size: 3rem;
             }
 
-            .hero-buttons {
+            .cta-group {
                 justify-content: center;
             }
 
-            .hero-visual {
-                order: -1;
+            .mockup-container {
+                margin-top: 60px;
             }
 
-            .phone-mockup {
-                width: 260px;
-                height: 540px;
-            }
-
-            .floating-card {
-                display: none;
-            }
-
-            .steps {
+            .bento-grid {
                 grid-template-columns: 1fr;
-                max-width: 400px;
-                margin: 60px auto 0;
+                grid-template-rows: auto;
             }
 
-            .features-grid {
-                grid-template-columns: 1fr;
+            .card-large {
+                grid-column: span 1;
+            }
+
+            .steps-container {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .steps-container::before {
+                width: 2px;
+                height: 100%;
+                left: 50%;
+                top: 0;
             }
         }
     </style>
 </head>
-<body>
-    <div class="bg-gradient"></div>
 
-    <!-- Navigation -->
+<body>
+    <div class="ambient-light"></div>
+
     <nav>
         <div class="container">
             <div class="logo">
-                <div class="logo-icon">💰</div>
-                ExpenseBot
+                ✨ ExpenseBot
             </div>
-            <a href="#start" class="nav-cta">Get Started</a>
+            <a href="https://wa.me/YOUR_PHONE_NUMBER" class="nav-btn">Start Chatting</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <header class="hero">
         <div class="container">
-            <div class="hero-content">
-                <div class="hero-text-content">
-                    <div class="hero-badge">
-                        <span>✨</span> Powered by AI
-                    </div>
-                    <h1>Track Expenses via <span class="highlight">WhatsApp</span></h1>
-                    <p class="hero-text">
-                        Just snap a receipt or type "Spent ₹500 on lunch" — our AI instantly logs, categorizes, and analyzes your spending. No app downloads needed.
+            <div class="hero-grid">
+                <div>
+                    <div class="hero-badge">🚀 v1.0 Now Live</div>
+                    <h1 class="hero-title">Track money where you <span class="gradient-text">chat.</span></h1>
+                    <p class="hero-desc">
+                        Forget complicated apps. Just chat with ExpenseBot on WhatsApp to track spending, manage
+                        budgets, and get instant AI insights.
                     </p>
-                    <div class="hero-buttons">
-                        <a href="https://wa.me/YOUR_NUMBER" class="btn-primary">
+                    <div class="cta-group">
+                        <a href="https://wa.me/YOUR_PHONE_NUMBER" class="btn-primary">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                <path
+                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                             </svg>
-                            Start on WhatsApp
+                            Try it on WhatsApp
                         </a>
-                        <a href="#features" class="btn-secondary">
-                            See Features →
-                        </a>
+                        <a href="#how-it-works" class="btn-glass">How it works</a>
                     </div>
                 </div>
-                <div class="hero-visual">
-                    <div class="phone-mockup">
+
+                <div class="mockup-container">
+                    <div class="phone-frame">
                         <div class="phone-screen">
-                            <div class="chat-header">
-                                <div class="chat-avatar">🤖</div>
+                            <div class="whatsapp-header">
+                                <div
+                                    style="width: 35px; height: 35px; background: linear-gradient(135deg, #7F5AF0, #2CB67D); border-radius: 50%;">
+                                </div>
                                 <div>
-                                    <div class="chat-name">ExpenseBot</div>
-                                    <div class="chat-status">Online</div>
+                                    <div style="font-size: 14px; font-weight: 600; color: white;">ExpenseBot</div>
+                                    <div style="font-size: 11px; color: #8696a0;">Online</div>
                                 </div>
                             </div>
-                            <div class="chat-body">
-                                <div class="message sent">Spent 250 on coffee at Starbucks</div>
-                                <div class="message received">
-                                    ✅ <strong>Expense Saved!</strong><br>
-                                    💰 Amount: ₹250<br>
-                                    📂 Category: Food<br>
-                                    🏪 Merchant: Starbucks<br><br>
-                                    📊 Today's total: ₹1,450
+                            <div class="chat-area">
+                                <div class="msg sent">Spent 350 at McDonald's</div>
+                                <div class="msg received">
+                                    ✅ <strong>Expense Logged</strong><br>
+                                    🍔 Food: ₹350<br>
+                                    📅 Today's Total: ₹1,250
                                 </div>
-                                <div class="message sent">Show my budget</div>
-                                <div class="message received">
-                                    📊 <strong>Monthly Budget Status</strong><br><br>
-                                    Food: 65%<br>
-                                    ▓▓▓▓▓▓░░░░<br>
-                                    ₹3,250 / ₹5,000
+                                <div class="msg sent" style="animation-delay: 2s;">Budget status?</div>
+                                <div class="msg received" style="animation-delay: 3s;">
+                                    📊 <strong>Monthly Budget</strong><br>
+                                    Food: 60% Used<br>
+                                    <div
+                                        style="width: 100%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 4px; margin-top: 6px;">
+                                        <div style="width: 60%; height: 100%; background: #25D366; border-radius: 4px;">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="floating-card card-1">
-                        <div class="emoji">📊</div>
-                        <div class="label">This Month</div>
-                        <div class="value">₹24,500</div>
-                    </div>
-                    <div class="floating-card card-2">
-                        <div class="emoji">📸</div>
-                        <div class="label">Receipts Scanned</div>
-                        <div class="value">47</div>
-                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </header>
 
-    <!-- Features Section -->
-    <section class="features" id="features">
+    <section class="features">
         <div class="container">
-            <div class="section-label">Features</div>
-            <h2 class="section-title">Everything you need to master your money</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📸</div>
-                    <h3>AI Receipt Scanning</h3>
-                    <p>Just snap a photo of any receipt. Our AI extracts the amount, merchant, items, and category automatically using Gemini Vision.</p>
+            <div class="section-header">
+                <h2>Designed for Speed</h2>
+                <p style="color: var(--text-muted); font-size: 1.2rem;">Powerful features wrapped in a simple chat
+                    interface.</p>
+            </div>
+
+            <div class="bento-grid">
+                <div class="bento-card card-large">
+                    <div class="card-icon">🧠</div>
+                    <h3>AI Receipt Scanner</h3>
+                    <p>Don't type. Just snap a photo of any receipt and our vision AI extracts merchant, date, amount,
+                        and items instantly.</p>
+                    <div class="card-visual" style="font-size: 8rem; right: -20px; bottom: -20px;">🧾</div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💬</div>
-                    <h3>Natural Language Input</h3>
-                    <p>Type expenses the way you talk: "Paid 500 for groceries" or "Uber ride 150 rupees". No forms, no friction.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Budget Tracking</h3>
-                    <p>Set monthly budgets for each category and get visual progress bars. Stay on track without spreadsheets.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🧠</div>
-                    <h3>AI Insights</h3>
-                    <p>Get personalized spending analysis and money-saving tips based on your actual spending patterns.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔍</div>
+                <div class="bento-card">
+                    <div class="card-icon">🔎</div>
                     <h3>Smart Search</h3>
-                    <p>Find any expense instantly. Search by description, merchant, or category. Your financial history at your fingertips.</p>
+                    <p>"How much did I spend on Uber last month?" - Just ask and get answers.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">✏️</div>
-                    <h3>Easy Corrections</h3>
-                    <p>Made a mistake? Just say "undo" or "edit last amount 300". Fix errors in seconds without any hassle.</p>
+                <div class="bento-card">
+                    <div class="card-icon">📈</div>
+                    <h3>Insights</h3>
+                    <p>Visual charts and spending habits analysis delivered to your chat.</p>
+                </div>
+                <div class="bento-card card-large">
+                    <div class="card-icon">🎯</div>
+                    <h3>Budget Alerts</h3>
+                    <p>Set limits for food, travel, or shopping. We'll warn you before you overspend. Stay in control of
+                        your financial health.</p>
+                    <div class="card-visual" style="font-size: 8rem; right: 20px; bottom: -20px;">🔔</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section class="how-it-works">
+    <section class="steps-section" id="how-it-works">
         <div class="container">
-            <div class="section-label">How It Works</div>
-            <h2 class="section-title">Start in 30 seconds</h2>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Message the Bot</h3>
-                    <p>Open WhatsApp and send a message to our number. Say "hi" to get started.</p>
+            <div class="section-header">
+                <h2>How It Works</h2>
+            </div>
+            <div class="steps-container">
+                <div class="step-item">
+                    <div class="step-circle">💬</div>
+                    <h3>1. Send Message</h3>
+                    <p style="color: var(--text-muted);">Say "Hi" to our official number on WhatsApp to enable the bot.
+                    </p>
                 </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Log Expenses</h3>
-                    <p>Send receipt photos or type expenses naturally. AI categorizes everything for you.</p>
+                <div class="step-item">
+                    <div class="step-circle">📸</div>
+                    <h3>2. Send Data</h3>
+                    <p style="color: var(--text-muted);">Type expenses or upload receipt photos directly in the chat.
+                    </p>
                 </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Track & Save</h3>
-                    <p>Check summaries, set budgets, and get insights. All within WhatsApp.</p>
+                <div class="step-item">
+                    <div class="step-circle">📊</div>
+                    <h3>3. Get Insights</h3>
+                    <p style="color: var(--text-muted);">Receive weekly reports and check your budget status anytime.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta" id="start">
-        <div class="container">
-            <div class="cta-box">
-                <h2>Ready to take control of your finances?</h2>
-                <p>No downloads. No sign-ups. Just open WhatsApp and start tracking.</p>
-                <a href="https://wa.me/YOUR_NUMBER" class="btn-primary">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                    </svg>
-                    Start Tracking Now
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer>
         <div class="container">
-            <p>© 2026 ExpenseBot. Built with ❤️ using AI.</p>
+            <div class="footer-logo">ExpenseBot</div>
+            <p class="copy">&copy; 2026 ExpenseBot. All rights reserved.</p>
         </div>
     </footer>
 </body>
+
 </html>
