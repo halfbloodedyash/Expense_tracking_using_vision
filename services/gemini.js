@@ -13,21 +13,21 @@ class GeminiService {
     // FIXED: Simple and safe regex patterns
     cleanJSONResponse(responseText) {
         if (!responseText) return null;
-        
+
         let cleaned = responseText;
-        
+
         // Remove ```
         cleaned = cleaned.replace(/```json/gi, '');
-        
+
         // Remove ```
         cleaned = cleaned.replace(/```/g, '');
-        
+
         // Remove extra newlines
         cleaned = cleaned.replace(/\n\s*\n/g, '\n');
-        
+
         // Trim whitespace
         cleaned = cleaned.trim();
-        
+
         return cleaned;
     }
 
@@ -60,14 +60,27 @@ class GeminiService {
                 }
             };
 
-            const result = await this.model.generateContent([prompt, imagePart]);
+            let result;
+            let retries = 3;
+
+            for (let i = 0; i < retries; i++) {
+                try {
+                    result = await this.model.generateContent([prompt, imagePart]);
+                    break;
+                } catch (e) {
+                    if (i === retries - 1) throw e;
+                    logger.warn(`Gemini Vision retry ${i + 1}/${retries} failed: ${e.message}`);
+                    await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
+                }
+            }
+
             const responseText = result.response.text();
-            
+
             logger.info('Raw Gemini response received');
 
             // Clean the response
             const cleanedResponse = this.cleanJSONResponse(responseText);
-            
+
             if (!cleanedResponse) {
                 logger.error('Empty response after cleaning');
                 return null;

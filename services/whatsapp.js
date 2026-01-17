@@ -9,31 +9,46 @@ class MetaWhatsAppService {
         this.baseUrl = `https://graph.facebook.com/${this.apiVersion}/${this.phoneNumberId}`;
     }
 
-    async sendMessage(to, message) {
-        try {
-            const url = `${this.baseUrl}/messages`;
-            const payload = {
-                messaging_product: 'whatsapp',
-                recipient_type: 'individual',
-                to: to,
-                type: 'text',
-                text: {
-                    body: message
-                }
-            };
+    async sendMessage(to, message, retries = 3) {
+        const url = `${this.baseUrl}/messages`;
+        const payload = {
+            messaging_product: 'whatsapp',
+            recipient_type: 'individual',
+            to: to,
+            type: 'text',
+            text: {
+                body: message
+            }
+        };
 
-            const response = await axios.post(url, payload, {
-                headers: {
-                    'Authorization': `Bearer ${this.accessToken}`,
-                    'Content-Type': 'application/json'
-                }
-            });
+        for (let attempt = 1; attempt <= retries; attempt++) {
+            try {
+                const response = await axios.post(url, payload, {
+                    headers: {
+                        'Authorization': `Bearer ${this.accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
 
-            console.log(`✅ Message sent to ${to}`);
-            return response.data;
-        } catch (error) {
-            console.error('❌ WhatsApp Send Error:', error.response?.data || error.message);
-            throw error;
+                if (attempt > 1) {
+                    logger.info(`✅ Message sent to ${to} (Attempt ${attempt})`);
+                } else {
+                    // Reduce noise for successful first attempts
+                    // logger.info(`✅ Message sent to ${to}`);
+                }
+                return response.data;
+            } catch (error) {
+                const isRetryable = error.code === 'ECONNRESET' || error.code === 'ETIMEDOUT' || (error.response && error.response.status >= 500);
+
+                if (attempt === retries || !isRetryable) {
+                    logger.error(`❌ WhatsApp Send Error (Final Attempt):`, error.response?.data || error.message);
+                    throw error;
+                }
+
+                const delay = Math.pow(2, attempt) * 1000; // Exponential backoff: 2s, 4s, 8s
+                logger.warn(`WhatsApp Send Failed (Attempt ${attempt}/${retries}). Retrying in ${delay}ms... Error: ${error.message}`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
         }
     }
 
@@ -94,19 +109,19 @@ class MetaWhatsAppService {
 
         const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
         const count = expenses.length;
-        
+
         let summary = `💰 *${count} expenses* - Total: *₹${total.toFixed(2)}*\n\n`;
-        
+
         expenses.slice(0, 10).forEach(exp => {
             const date = new Date(exp.date).toLocaleDateString('en-IN');
             const merchant = exp.merchant ? ` at ${exp.merchant}` : '';
             summary += `• ₹${exp.amount}${merchant} (${exp.category}) - ${date}\n`;
         });
-        
+
         if (expenses.length > 10) {
             summary += `\n... and ${expenses.length - 10} more`;
         }
-        
+
         return summary;
     }
 
@@ -120,7 +135,7 @@ class MetaWhatsAppService {
             const emoji = this.getCategoryEmoji(cat.category);
             summary += `${emoji} ${cat.category}: ₹${cat.total.toFixed(2)} (${cat.count} items)\n`;
         });
-        
+
         return summary;
     }
 

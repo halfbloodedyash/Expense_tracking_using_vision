@@ -8,9 +8,9 @@ class GroqService {
         });
     }
 
-async parseTextExpense(userMessage) {
-    try {
-        const prompt = `
+    async parseTextExpense(userMessage) {
+        try {
+            const prompt = `
         Parse this expense message in Indian context and extract the spending information.
         Message: "${userMessage}"
         
@@ -29,31 +29,43 @@ async parseTextExpense(userMessage) {
         - "Bus fare 30 rupees" -> amount: 30
         `;
 
-        const completion = await this.groq.chat.completions.create({
-            messages: [{ role: "user", content: prompt }],
-            model: "llama-3.1-8b-instant",
-            temperature: 0.1,
-            max_tokens: 200
-        });
+            let completion;
+            let retries = 3;
 
-        const response = completion.choices[0].message.content.trim();
-        const cleanResponse = response.replace(/``````/g, '').trim();
-        
-        const parsedData = JSON.parse(cleanResponse);
-        
-        if (!parsedData.amount || isNaN(parsedData.amount) || parsedData.amount <= 0) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    completion = await this.groq.chat.completions.create({
+                        messages: [{ role: "user", content: prompt }],
+                        model: "llama-3.1-8b-instant",
+                        temperature: 0.1,
+                        max_tokens: 200
+                    });
+                    break;
+                } catch (e) {
+                    if (i === retries - 1) throw e;
+                    logger.warn(`Groq parsing retry ${i + 1}/${retries} failed: ${e.message}`);
+                    await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i)));
+                }
+            }
+
+            const response = completion.choices[0].message.content.trim();
+            const cleanResponse = response.replace(/``````/g, '').trim();
+
+            const parsedData = JSON.parse(cleanResponse);
+
+            if (!parsedData.amount || isNaN(parsedData.amount) || parsedData.amount <= 0) {
+                return null;
+            }
+
+            // Ensure currency is set to INR
+            parsedData.currency = 'INR';
+            return parsedData;
+
+        } catch (error) {
+            logger.error('Groq API Error:', error);
             return null;
         }
-
-        // Ensure currency is set to INR
-        parsedData.currency = 'INR';
-        return parsedData;
-        
-    } catch (error) {
-        logger.error('Groq API Error:', error);
-        return null;
     }
-}
 
 
     async generateInsights(expenses) {
@@ -73,7 +85,7 @@ async parseTextExpense(userMessage) {
 
             const totalAmount = expenseData.reduce((sum, exp) => sum + exp.amount, 0);
             const categoryBreakdown = {};
-            
+
             expenseData.forEach(exp => {
                 categoryBreakdown[exp.category] = (categoryBreakdown[exp.category] || 0) + exp.amount;
             });
@@ -110,10 +122,10 @@ async parseTextExpense(userMessage) {
             });
 
             const insights = completion.choices[0].message.content.trim();
-            
+
             logger.info('Insights generated successfully');
             return insights;
-            
+
         } catch (error) {
             logger.error('Groq Insights Error:', error);
             return "Unable to generate insights at the moment. Please try again later.";
@@ -140,9 +152,9 @@ async parseTextExpense(userMessage) {
 
             const category = completion.choices[0].message.content.trim().toLowerCase();
             const validCategories = ['food', 'transport', 'shopping', 'entertainment', 'healthcare', 'utilities', 'other'];
-            
+
             return validCategories.includes(category) ? category : 'other';
-            
+
         } catch (error) {
             logger.error('Categorization error:', error);
             return 'other';
